@@ -1,0 +1,8 @@
+@import "base/variables"; // Equivalent to base/_variables.scss. Notice how it removes underscore and extension.
+
+// foundation
+@import "base/foundation-settings";
+@import "foundation";
+@include foundation-everything;
+
+// Components
