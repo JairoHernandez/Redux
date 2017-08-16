@@ -910,3 +910,8 @@ functions otherwise code is not going to work as expected.
 It shouldn't be updating any variables outside of it.
 3. Avoid promises and asynchronous call like I/O requests accessing a DB or making an HTTP request 
 to some 3rd party API.
+
+------------Creating a Reducer and Getting App State------------
+
+Modify state with an action.
+"action" changes the default state or state.
