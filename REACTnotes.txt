@@ -912,6 +912,14 @@ It shouldn't be updating any variables outside of it.
 to some 3rd party API.
 
 ------------Creating a Reducer and Getting App State------------
-
 Modify state with an action.
 "action" changes the default state or state.
+
+------------Dispatching and Handling Actions------------
+Toggling actions like 'show completed' checkbox dont require being passed in.
+	var action = {
+		type: 'CHANGE_NAME',
+		name: 'Andrew'
+	};
+
+3:05
