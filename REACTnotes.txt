@@ -1,0 +1,912 @@
+test clone
+test 2
+
+'npm install express@4 express --save' (will create node_mofules folder and adds entry in dependencies section)
+'npm install by' itself installs dependencies based on what package.json says, which also re-installs node_modules folder.
+
+
+-------------Hello React - Hello React!-------------
+
+<script type="text/javascript" scrc="https://cdnjs.cloudflare.com/ajax/libs/0.14.7/react.js"></script>
+<script type="text/javascript" scrc="https://cdnjs.cloudflare.com/ajax/libs/0.14.7/react-dom.js"></script>
+
+	react.js is for native IOS and Android.
+	react-dom.js is for the WEB.
+
+	We will eventually upgrade from script tags to webpack in later sections.
+
+Babel provides supports your ES6 code and compiles it to older ES5 code so older browsers can run it.
+To convert JSX into JS or convert ES6 code into ES5 include babel script tag.
+	
+	<head>
+		<script type="text/javascript" scrc="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+	<body>
+		<script type="text/babel"></script>
+	
+-------------Your First React Component!-------------
+
+React component naming convention. 
+	- 1st letter is always capitalized.
+
+React.createClass always takes in an object and always requires render.
+
+	var GreeterWord = React.createClass({
+		render: function() {
+			return (
+				// THIS IS JSX
+				<div> // root <div>
+					<h1>Hello render react!!!</h1>
+					<p>This is from the component.</p>
+				</div>
+			);
+		}
+	});
+
+	NOTE!! when returning your JSX you have to only return one root element in our example it is the root <div>
+
+-------------Learning JSX-------------
+https://babeljs.io.repl
+
+-------------Component properties-------------
+'props' is short for properties and it's a way to pass in data into your component when you first start it.
+
+Here we are initializing the Greeter component but not passing data.
+
+	ReactDOM.render(
+		<Greeter />, document.getElementById('app')
+	);
+
+Do this to pass data via a 'name' property.
+
+	var Greeter = React.createClass({
+
+		getDefaultProps: function() { // Used when props are not passed down from the parent.
+			return {
+				name: 'React', // This is a prop accessed by this.props.
+				message: 'This is React message.'
+			};
+		},
+
+		render: function() {
+
+			var name = this.props.name; 
+			var message = this.props.message;
+
+			return (
+				<div>
+					<h1>Hello {name}!!</h1> 
+					<p>{message + '!!'}</p> // You can concatenate text inside JSX expression.
+				</div>
+			);
+		}
+	});
+
+	// You can also pass in variable values just like componet properties. 
+	// This means any type is availabe when working with props.
+	var firstName = 'Jairo'
+
+	ReactDOM.render(
+		<Greeter name={firstName} message='This is prop message.' />, document.getElementById('app')
+	);
+
+-------------User Events and Callbacks-------------
+
+'onSubmit' is an  attribute built into React.
+It captures everytime a form is submitted and we can pass it a JS expression.
+'ref' ia another React builin attribute	
+
+	onButtonClick: function(e) { 
+		e.preventDefault(); // Prevents form from causing full browser refresh when its submitted. This is the goal of React for SPAs.
+		var name= this.refs.name.value; // tied to ref field from from.
+		alert(name);
+	},
+	.....
+	<form onSubmit={this.onButtonClick}>
+		<input type="text" ref="name"/>
+		<button>Set Name</button>
+	</form>
+
+-------------Component State-------------
+
+There are two types of data in a component:	props and state.
+	
+	- props get passed into a component as you initialize it, the prop is 'name'.
+		
+		<Greeter name={firstName}
+	
+	- state is internally maintained and updated by the component. 
+	It should not update its own props, but it is allowed to update its own state.
+	
+	Always answer this:  IS MY COMPONENT GOING TO BE UPDATING THE VALUE?
+	To know if I need to use state.
+
+-------------Nested Components: Part 1 & 2-------------
+
+A component cannot update its prop but it can update its state.
+
+It's best to make a static component first, meaning no props or state are being used or passed in.
+
+Presentational component renders something visible to the screen like "Hello Andrew".
+They do not maintain state are kind of like dummy components.
+
+The Container component(in red aka parent) do maintain state. 
+Red component maintains 'name' state and when changed by blue component it will re-render green component.
+It automatically re-renders its children when state changes.
+
+<GreeterForm onNewName={this.handleNewName}/> // the attribute for the child start with 'on' and for the parent it starts with 'handle'.
+
+Only updates the green component because the blue component does not care about the state of its parent.
+Whenever you changed state it re-renders.
+
+-------------QUIZ 1-------------
+
+What are React props used for? Initializing a component with data.
+What is React state used for? Keeping track of data that changes in a component.
+What is a presentational component? A component that uses props to display information.
+What is a container component? A component that maintains state & renders child components.
+How would you set a components "name" state to "John"? this.setState({name: 'John'}).
+
+-------------What is Webpack?(And installing it.)-------------
+
+WEbpack bundles all of our 3rd party dependencies like babel, react, and reactdom along with app code.
+Let's us break components into separate files sort like 'require' in node.
+
+~/REACT/HelloReact$ npm install -g webpack@1.12.13
+jairomh@ubuntu64-DevOps:~/REACT/HelloReact$ webpack -h
+webpack 1.12.13
+Usage: https://webpack.github.io/docs/cli.html
+
+Options:
+  --help, -h, -?                                                                                  
+  --config                                                                                        
+  --context    
+
+~/REACT/HelloReact$ npm install -save react@0.14.7 react-dom@0.14.7
+
+Install local dependencies for dev purposes only and not for production.
+        
+~/REACT/HelloReact$ npm install --save-dev webpack@1.12.13 babel-core@6.5.1 babel-loader@6.2.2 babel-preset-es2015@6.5.0 babel-preset-react@6.5.0
+
+~/REACT/HelloReact$ webpack ./public/app.js ./public/bundle.js
+Hash: ccbca6cc6c5a756e0b3e
+Version: webpack 1.12.13
+Time: 71ms
+    Asset     Size  Chunks             Chunk Names
+bundle.js  1.47 kB       0  [emitted]  main
+   [0] ./public/app.js 79 bytes {0} [built]
+
+-------------What is Webpack?(And installing it.)-------------
+
+webpack.config.js is a very important file that exports an object to let you configure what webpack does.
+By adding this in there all you need do is run webpback command without supplying filenames.
+
+	module.exports = {
+		entry: './public/app.js',
+		output: {
+			path: __dirname,
+			filename: './public/bundle.js'
+		},
+		resolve: {
+			extensions: ['', '.js', '.jsx']
+		}
+	};
+
+
+	~/REACT/HelloReact$ webpack
+	Hash: 7f675e0aa18af882cb64
+	Version: webpack 1.12.13
+	Time: 78ms
+				Asset     Size  Chunks             Chunk Names
+	./public/bundle.js  1.62 kB       0  [emitted]  main
+	[0] ./public/app.js 59 bytes {0} [built]
+		+ 1 hidden modules <<< 	WHERE THAT FILE IS Greeter.js
+
+After removing the script tags 'React' is not available in app.jsx. When using webpack every file is treated as its own island.
+It's not available globally and needs to be imported explicitly.
+
+	var React = require('react');
+	var ReactDOM = require('react-dom');
+
+	Run webpack again and you see that there are a lot more dependencies this time.
+
+	~/REACT/HelloReact$ webpack 
+	Hash: 84fd7d74053b8bd7605e
+	Version: webpack 1.15.0
+	Time: 2201ms
+				Asset    Size  Chunks             Chunk Names
+	./public/bundle.js  683 kB       0  [emitted]  main
+		+ 159 hidden modules
+
+-------------Webpack: Custom package names-------------
+
+Remove the ./ and path to your jsx file.
+
+	var GreeterForm = require('./GreeterForm');
+to this
+	var GreeterForm = require('GreeterForm');
+which allows you to re-use the same entry in any other jsx file and if you move the jsx file 
+just update it one place in webpack.config.js below.
+
+	resolve: {
+		root: __dirname,
+			alias: {
+				Greeter: 'public/components/Greeter.jsx',
+				GreeterMessage: 'public/components/GreeterMessage.jsx',
+				GreeterForm: 'public/components/GreeterForm.jsx'
+			}
+
+One more tip is this webpack equivalent to nodemon.
+~/REACT/HelloReact$ webpack -w
+Hash: 82eae04f3588c571f6f2
+Version: webpack 1.12.13
+Time: 2724ms
+             Asset    Size  Chunks             Chunk Names
+./public/bundle.js  683 kB       0  [emitted]  main
+    + 162 hidden modules
+
+-------------Boilerplate project-------------
+
+Copy all contents of HelloReact folder to make a new folder called ReactBoilerplate.
+Remove all alias entries from its array in webpack.config.js.
+
+	Greeter: 'public/components/Greeter.jsx',
+	GreeterMessage: 'public/components/GreeterMessage.jsx',
+	GreeterForm: 'public/components/GreeterForm.jsx'
+
+Create folder ReactBoilerplate/app and move folder 'components' and 'app.jsx' into it.
+This is where we are going to store all our raw files. In this case our jsx files before they get passed thru bundler.
+
+Change entry: './public/app.jsx', to entry: './app/app.jsx',
+Keep this the same filename: './public/bundle.js' becaue the bundle file is used by the browser inside index.html, which live in the same folder.
+
+package.json
+	Change "name": "hello-react" to "name": "boilerplate". Try to use lowercase letters with no spaces to avoid future errors.
+
+Remove this from app.jsx since not needed in a boilerplate.
+
+	var Greeter = require('./components/Greeter');
+
+	// You can also pass in variable values just like componet properties. 
+	// This means any type is availabe when working with props.
+	var firstName = 'Odie'
+
+-------------Bonus: Using Experimental Javascript Features-------------
+
+For this experimentla ES6 feature ...objOne to work you need to install stage-0 webpack plugin.
+
+	~/REACT/ReactBoilerplate$ npm install babel-preset-stage-0 --save-dev
+
+	app.jsx
+		var objOne = { 	name: 'Jairo', 	location: 'Mansfield' };
+		var objTwo = { age: 37, ...objOne };
+
+	and it needs to be added in	webpack.config.js
+		
+		presets: ['react', 'es2015', 'stage-0']
+
+-------------Adding React Router-------------
+
+~/REACT/ReactWeather$ npm install react-router@2.0.0 --save
+
+// If you forget module.exports you will get 'Error: The root route must render a single element'
+module.exports = Main; 
+
+Create Nav component and render inside of the Main component.
+History hash is used to track pages with '#/[urlname]' in URL.
+	app.jsx
+		<Router history={hashHistory}>
+
+In browser this 'k' info is used by react router to keep track of state of application between route changes.
+	http://localhost:3000/#/?_k=rupgln
+
+	The '/' URL after '#' is used by this 
+	app.jsx
+		<Route path="/" component={Main}>
+
+-------------Creating our pages-------------
+
+'/' renders {Weather} while '/about' renders {About}
+	
+	<Route path="/" component={Main}>
+		<Route path="about" component={About}/> 
+		<IndexRoute component={Weather}/> // If nothing matches into the entered URL use this one.
+	</Route>		
+
+	The about component is found via this URL
+		http://localhost:3000/#/about?_k=18lqiu
+
+-------------Exploring OpenWeathermap.org-------------
+
+http://samples.openweathermap.org/data/2.5/weather?q=London,uk&appid=b1b15e88fa797225412429c1c50c122a1
+http://samples.openweathermap.org/data/2.5/find?q=London&units=imperial&appid=b1b15e88fa797225412429c1c50c122a1
+http://samples.openweathermap.org/data/2.5/find?q=London&units=imperial
+
+my key 7960c1b1b4718b05110e495c2f37e1ac
+
+-------------ES6 promisses GREAT TUTORIAL-------------
+
+-------------Faking Our Call GREAT PRESENTATIONAL AND STATE FLOW-------------
+
+handleSearch and onSearch are both naming conventions.
+getInitialState is built into react.
+
+this.state and this.props are both objects
+	
+	Weather.jsx
+		var {temp, location} = this.props;
+	WeatherMessage.jsx
+		var {location, temp} = this.state; 
+
+-------------Making Our API Call-------------
+
+-------------Debugging and the React Router-------------
+
+-------------Google Chrome 'React Developer Tools-------------
+-------------Advanced Debugging-------------
+Due to a library bug there is a small issue in the next video. 
+In the next lecture you'll learn how to setup source maps by setting a "devtool" property in webpack.config.js. 
+In the lecture I set the value to "cheap-module-eval-source-map". This might cause the source maps to not work as shown in the video.
+If you are getting this error, try setting the value to either "inline-source-map" or "eval-source-map" instead.
+
+Pause execution of code. This is where real debugging happens.
+	debugger;
+
+sourcemaps let's you debug the code you actually wrote instead of having to look at that big transformed bundle.js file.
+Add this to webpack.config.js
+	devtool: 'cheap-module-eval-source-map'.
+
+Cool you dont even need to use console.log in the console. Just type in the variable name.
+
+-------------ES6 Asside: Arrow Functions-------------
+
+Anonymous functions have a 'this' binding.
+Arrow functions take on their parent's 'this' binding.
+
+-------------Refactoring: Stateless Functional Components-------------
+
+Brand new feature in 0.14 of React.
+Presentational components dont carry state so you can swap out React.createClass that only carry a 
+'render' key  with an anonymous function(or arrow function).
+These two functions are equivalent:
+	About.jsx
+		// var About = React.createClass({
+		//     render: function() {
+		//         return (
+		//             <h3>About Component</h3>
+		//         );
+		//     }
+		// });
+
+		var About = (props) => {
+			return (
+				<h3>About Component</h3>
+			);
+		}
+
+this.props.children can now be this
+	Main.jsx
+		// var Main = React.createClass({
+		//     render: function() {
+		//         return (
+		//             <div>
+		//                 <Nav/>
+		//                 <h1>Main Component</h1>
+		//                 {this.props.children}
+		//             </div>
+		//         );
+		//     }
+		// });
+
+		var Main = (props) => {
+			return (
+				<div>
+					<Nav/>
+					<h1>Main Component</h1>
+					{props.children}
+				</div>
+			);
+		};
+
+-------------Joining Github and Generating SSH Keys-------------
+
+jairomh@DEV2:~/REACT/ReactWeather$ ls -al ~/.ssh
+ls: cannot access '/home/jairomh/.ssh': No such file or directory
+jairomh@DEV2:~/REACT/ReactWeather$ mkdir ~/.ssh
+jairomh@DEV2:~/REACT/ReactWeather$ chmod 700 ~/.ssh
+jairomh@DEV2:~/REACT/ReactWeather$ ssh-keygen -t rsa -b 4096 -C 'jairomh@hotmail.com'
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/jairomh/.ssh/id_rsa): 
+Enter passphrase (empty for no passphrase): 
+Enter same passphrase again: 
+Your identification has been saved in /home/jairomh/.ssh/id_rsa.
+Your public key has been saved in /home/jairomh/.ssh/id_rsa.pub.
+The key fingerprint is:
+SHA256:pDsC6dUSa5hF5UYo6P1lKiEKNoeLvVfl6Kq/9tJntAc jairomh@hotmail.com
+The key's randomart image is:
++---[RSA 4096]----+
+| .  .oo          |
+|. ...o           |
+|. o.o o .        |
+|.* O = =.        |
+|=.X B *+S        |
+|oo.= +o.E        |
+|  ..o+o. o       |
+|  . +.o.+ .      |
+|  .=+=.o .       |
++----[SHA256]-----+
+
+Check that the process is running.
+
+jairomh@DEV2:~/REACT/ReactWeather$ eval "$(ssh-agent -s)"
+Agent pid 6688
+
+jairomh@DEV2:~/REACT/ReactWeather$ ssh-add ~/.ssh/id_rsa
+Identity added: /home/jairomh/.ssh/id_rsa (/home/jairomh/.ssh/id_rsa)
+
+Create ssh key on github using these contents
+jairomh@DEV2:~/REACT/ReactWeather$ cat ~/.ssh/id_rsa.pub 
+
+jairomh@DEV2:~/REACT/ReactWeather$ 	
+The authenticity of host 'github.com (192.30.253.113)' can't be established.
+RSA key fingerprint is SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added 'github.com,192.30.253.113' (RSA) to the list of known hosts.
+Hi JairoHernandez! You've successfully authenticated, but GitHub does not provide shell access.
+
+-------------Pushing to GitHub-------------
+
+jairomh@DEV2:~/REACT/ReactWeather$ git remote add origin https://github.com/JairoHernandez/ReactWeather.git
+jairomh@DEV2:~/REACT/ReactWeather$ git push origin master (or eventually git push heroku master)
+jairomh@DEV2:~/REACT/ReactWeather$ git remote -v
+origin	https://github.com/JairoHernandez/ReactWeather.git (fetch)
+origin	https://github.com/JairoHernandez/ReactWeather.git (push)
+jairomh@DEV2:~/REACT/ReactWeather$ git branch
+* master
+
+-------------Heroku Singup and Toolbelt-------------
+
+Just download it from the heroku website. Depending on OS you might have to install
+via cli or download install click package.
+
+~/REACT/ReactWeather$ sudo snap install heroku
+or
+~/REACT/ReactWeather$ npm install -g heroku-cli
+
+Add to package.json
+	"start": "node server.js"
+
+$ heroku login
+$ heroku create
+
+Link to existing Heroku app.
+
+	jairomh@DEV2:~/REACT/ReactWeather$ heroku git:remote -a obscure-journey-75252
+	set git remote heroku to https://git.heroku.com/obscure-journey-75252.git
+	jairomh@DEV2:~/REACT/ReactWeather$ git remote -v
+	heroku	https://git.heroku.com/obscure-journey-75252.git (fetch)
+	heroku	https://git.heroku.com/obscure-journey-75252.git (push)
+	origin	git@github.com/JairoHernandez/ReactWeather.git (fetch)
+	origin	git@github.com/JairoHernandez/ReactWeather.git (push)
+	jairomh@DEV2:~/REACT/ReactWeather$ git push heroku master
+	Everything up-to-date
+
+
+-------------Installing foundation-------------
+-------------Styling Examples Page-------------
+
+
+$ npm install css-loader@0.23.1 script-loader@0.6.1 style-loader@0.13.0 jquery@2.2.1 foundation-sites@6.2.0 --save-dev
+$ npm install foundation-sites@6.2.0 --save-exact --save-dev
+
+class="small-6 columns" means on a small screen in the row use 6 columns
+which is 6/12=50%. And since it's small this will also apply to medium/large columns
+too since Founction is mobile first.
+
+small = small-12
+It's to use plain small to take up all 12 colums on small screen sizes. 
+That way it uses the whole screen to display as much as possible.
+
+-------------Adding a Modal for Errors part 1-------------
+
+data-reveal let's Foundation know we are dealing with a modal.
+	<div id="error-modal" className="reveal tiny text-center" data-reveal>
+
+data-close will close the modal
+	<button className="button hollow" data-close>Okay</button>
+
+Component Lifecycle
+	facebook.github.io/react
+
+	Is where you can find render, getInitialState, getDefaultProps methods
+
+-------------Adding a Modal for Errors part 2-------------
+
+Goal: Error message properly passed down from parent to child
+
+	Parent is Weather.jsx.
+	Child is ErrorModal component.
+
+	If you get this error then it means you have newer version of Axios that has changed
+	how errors are handled.
+
+		Error
+		Cannot read property 'message' of undefined
+
+REVIEW OF video
+	componentDidMount is automatically called by React after the component gets updated
+	with what's in you render function. Reason for componentDidMount is to open the modal
+	when ErrorModal component gets rendered.
+
+	propTypes lets us setup props and their types.
+
+	propTypes: {
+        title: React.PropTypes.string,
+        message: React.PropTypes.string.isRequired
+    },
+    componentDidMount: function() {
+        var modal = new Foundation.Reveal($('#error-modal'));
+        modal.open();
+
+-------------Adding Custom CSS-------------
+
+Weather.jsx
+	return <h3 className="text-center page-title">Fetching weather....</h3>;
+
+Add this to webpack.config so it can recompile CSS everytime we change styles/app.css
+
+-------------Setting up SCSS-------------
+
+sass-lang.com
+
+Install sas loader and nodesas
+	nodesas converts scss files to normal css.
+
+	$ npm install sass-loader@3.1.2 node-sass@3.4.2 --save-dev
+
+	You have to change extention of app.css to app.scss.
+	And also updata extension in webpack.config.
+
+	Also in app.jsx one needs to change	require('style!css!applicationStyles')
+	to require('style!css!sass!applicationStyles')
+
+-------------Linking To Location And Wiring Up Nav Form-------------
+
+Weather.jsx
+	componentDidMount: function() {} fires when component is mounted into the browser.
+	Reset the query string after searching weather.
+
+ 	// will remove query string in browser after weather has been successfully searched.
+    // which will prevent loading the same temperature/city at browser refresh.
+	window.location.hash = '#/'; 
+
+%20 is encoded version of a space.
+
+HUGE TIP!!
+	prop - component cannot change it, but a parent can always update a child's prop. For example React router will update the 
+	state - component can change it.
+
+// Makes 'Get Weather' page display temp/city when you top right corner search.
+    componentWillReceiveProps: function(newProps) {
+
+
+******TESTING AND COMPONENT LIFECYCLE******
+
+-------------Adding The Navigation Bar-------------
+
+To be used with SCSS
+	activeClassName="active-link"
+
+-------------Customizing The Navigation Bar-------------
+
+ReactTimer/app/styles/app.scss
+ReactTimer/app/styles/components/_navigation.scss
+	When you start file with underscore it teljs scss this file is a partial and is usually used with other files.
+	In this case the navaigatino file is going to get loaded via the code in app.scss.
+
+ReactTimer/app/styles/app.scss
+	@import "base/variables"; // Equivalent to base/_variables.scss. Notice how it removes underscore and extension.
+	@import "components/navigation";
+
+Allows us to keep the files small for big applications, but it will create more files. None grow out of control and are more maintainable.
+
+jairomh@ubuntu64-DevOps:~/REACT/ReactTimer$ heroku create
+Creating app... done, ⬢ vast-sea-20558
+https://vast-sea-20558.herokuapp.com/ | https://git.heroku.com/vast-sea-20558.git
+
+Verify heroku app is created.
+	jairomh@ubuntu64-DevOps:~/REACT/ReactTimer$ git remote -v
+	heroku	https://git.heroku.com/vast-sea-20558.git (fetch)
+	heroku	https://git.heroku.com/vast-sea-20558.git (push)
+	origin	git@github.com:JairoHernandez/ReactTimer.git (fetch)
+	origin	git@github.com:JairoHernandez/ReactTimer.git (push)
+
+-------------Basics of Testing-------------
+
+Michael Jackson Expect library.
+
+-------------Configuring Tests with Webpack and React------------
+
+~/REACT/ReactTimer$ npm install karma@0.13.22 karma-chrome-launcher@0.2.2 karma-mocha@0.2.2 karma-mocha-reporter@2.0.0 karma-sourcemap-loader@0.3.7 karma-webpack@1.7.0 mocha@2.4.5 expect@1.14.0 --save-dev
+
+Google karma test runner.
+Google mocha 'Getting started.
+Karma is connected to webpackconfig.js.
+
+ReactTimer/karma.conf.js
+	modules.exports = function(config) {
+		config.set({
+			browsers: ['Chrome'],
+			singleRun: true,
+			frameworks: ['mocha'],
+			files: ['app/tests/**/*.test.jsx'],
+			preprocessors: {
+				'app/tests/**/*.test.jsx': ['webpack', 'sourcemap'] // sourcemap uses actual jsx files and not bundle.js when getting errors
+			},
+			reporters: ['mocha'], // cleans up output
+			client: {
+				mocha: {
+					timeout: '5000'
+				}
+			},
+			webpack: webpackConfig,
+			webpackServer: {
+				noInfo: true // Set true if we dont care about webpackServer
+			}
+		});
+	}
+
+package.json
+	Replace "test": "echo \"Error: no test specified\" && exit 1" with "test": "karma start"
+
+-------------Clock Component------------
+
+Under tests folder emulate the components folder structure and its files by also adding a components folder under tests folder
+along with the same filenames.
+
+React also brings this package to make testing easier.
+
+$ npm install react-addons-test-utils@0.14.7 --save-dev
+
+To run a test that uses a component you have to access the methods on it with TestUtils.
+	var clock = TestUtils.renderIntoDocument(<Clock/>);	// This is exactly the same way you would access a component in any file.
+
+RECAP:
+
+1. Create Clock.jsx to write function formatSeconds that formats seconds into readable time xx:xx.
+2. Create Clock.test.jsx to used returned result of formatSeconds to make sure it returns expected result.
+3. Put Clock.jsx component to return time xx:xx in render function of Countdown.jsx. 
+
+-------------Countdown Form------------
+
+Remember that a parent can pass a function down into the child. The child can call that function and the parent can take action based on any 
+parameters that get passed up. In this case we pass UP the seconds.
+
+	<input type="text" ref="seconds" placeholder="Enter time in seconds"/>
+
+------------Testing Our Form With Spies------------
+
+spy tests where the spy is the function being called.
+https://github.com/mjackson/expect
+
+	expect(spy).toHaveBeenCalled()	
+	expect(spy).toNotHaveBeenCalled()
+
+------------Starting the Countdown------------
+
+Keep track of the state:
+	Is the countdown stopped, paused, started?
+
+	handleSetCountdown: function(seconds) {
+        this.setState({
+            count: seconds, // Assigned to from the form input.
+            countdownStatus: 'started' // HOW DO WE LISTEN FOR THIS CHANGE? BY USING COMPONENT LIFECYCLE methods
+
+You can call component lifecycle method everytime your state is updated.
+
+------------Testing that Counting Down Works------------
+
+CountdownForm.test.jsx
+	it('should set state to started and countdown', (done) => { // 'done' allows mocha to run async test via setTimeout().
+
+------------Creating Our Controls------------
+
+------------Pausing Starting Resetting------------
+
+Fires event to pause countdown.
+Render the countdown form when countdown status is stopped.
+If countdown is started or paused then render controls.
+
+------------Component Lifecycle------------
+
+When you click between links 'Countdown' and 'Timer' you can run code(function) to make something happen.
+
+Countdown.jsx
+	Automtically gets fired right before component gets removed from the DOM hence 
+	visually removed from the browser.
+		
+		componentWillUnmount: function() { // executes when going from Countdown page to clicking Timer page
+
+	Here are more.
+
+		// Fires before props or state gets updated. Unlike componentDidUpdate instead of 
+		// taking in previous props and state it takes in new props and state.
+		componentWillUpdate: function(nextProps, nextState) { 
+
+		},
+
+		componentWillMount: function() { // Fires right before component is shown to screen
+			console.log('componentWillMount');
+		},
+
+		componentDidMount: function() { // Fired right after everything is rendered in the DOM.
+			console.log('componentDidMount');
+		},
+
+Controls.jsx
+	// Listens and shows every update of a prop passed to this component from the parent 
+    // so we can now liste to lifecycle method that watches for this change.
+    componentWillRecieveProps: function(newProps) { 
+        console.log('componentWillReceiveProps', newProps.countdownStatus);
+    },
+
+Controls.test.jsx
+	describe('render', () => {
+			it('should render Pause when started', () => { 
+				// Empty onStatusChange property is needed to avoid harmless ERROR/Warning
+				// ERROR: 'Warning: Failed propType: Required prop `onStatusChange` was not specified in `Controls`.'
+				var controls = TestUtils.renderIntoDocument(<Controls countdownStatus="started" onStatusChange={() => {}}/>);
+
+------------Foundation Settings & Karma Issues------------
+
+If you want to make a change and you wan to make a change to every foundation element it's best to just
+tweak _foundation-settings.scss(which a config copy of 
+
+/home/jairomh/REACT/ReactTimer/node_modules/foundation-sites/scss/settings/_settings.scss
+
+You can overwrite it with css but that's only going to get messier when making changes to 
+a subset of buttons instead of all buttons.
+
+------------FINAL BOILER PLATE------------
+
+Make sure these 5 things run after deleting stuff.
+
+1). jairomh@ubuntu64-DevOps:~/REACT/ReactBoilerplate3$ npm test
+
+> boilerplate@1.0.0 test /home/jairomh/REACT/ReactBoilerplate3
+> karma start
+
+
+START:
+28 07 2017 17:17:15.132:INFO [karma]: Karma v0.13.22 server started at http://localhost:9876/
+28 07 2017 17:17:15.148:INFO [launcher]: Starting browser Chrome
+28 07 2017 17:17:18.543:INFO [Chrome 56.0.2924 (Linux 0.0.0)]: Connected on socket VS_Nj0HzvFUE4eUSAAAA with id 82358568
+  App
+    ✔ should properly run tests
+
+Finished in 0.115 secs / 0.001 secs
+
+SUMMARY:
+✔ 1 test completed
+
+2). jairomh@ubuntu64-DevOps:~/REACT/ReactBoilerplate3$ webpack
+Hash: c2a1872b10b029d21c07
+Version: webpack 1.15.0
+Time: 4826ms
+             Asset     Size  Chunks             Chunk Names
+./public/bundle.js  2.96 MB       0  [emitted]  main
+   [0] multi main 52 bytes {0} [built]
+    + 232 hidden modules
+
+3). jairomh@ubuntu64-DevOps:~/REACT/ReactBoilerplate3$ node server.js 
+Express server up on port 3000
+
+4. Delete node_modules folder.
+5. Remove git repos.
+
+rm -rf ./.git/
+
+------------TODO App Demo and Learning Goals------------
+
+Root component TodoApp -- only one that maintains state.
+Presentational component Search sends up to TodoApp to filter todos.
+Presentational component AddTodo triggers event when entering a todo item which sends up to TodoApp to update state.
+TodoList component 
+	When working with a list of data it's important to create a separate component for that list
+	It renders itself when checking off a todo item.
+
+
+------------Creating the Root Component(Todo App)------------
+
+jairomh@ubuntu64-DevOps:~/REACT/ReactTodo$ git remote -v
+origin	git@github.com:JairoHernandez/react-boilerplate.git (fetch)
+origin	git@github.com:JairoHernandez/react-boilerplate.git (push)
+jairomh@ubuntu64-DevOps:~/REACT/ReactTodo$ git remote rm origin
+jairomh@ubuntu64-DevOps:~/REACT/ReactTodo$ git remote -v
+jairomh@ubuntu64-DevOps:~/REACT/ReactTodo$ git remote add origin git@github.com:JairoHernandez/REACT-todo.git
+jairomh@ubuntu64-DevOps:~/REACT/ReactTodo$ git push -u origin master
+Counting objects: 21, done.
+Compressing objects: 100% (17/17), done.
+Writing objects: 100% (21/21), 725.88 KiB | 0 bytes/s, done.
+Total 21 (delta 0), reused 21 (delta 0)
+To git@github.com:JairoHernandez/REACT-todo.git
+ * [new branch]      master -> master
+Branch master set up to track remote branch master from origin.
+
+------------Rendering Lists in React(TodoList & Todo)------------
+
+TodoList component knows how to render a list of todos that it gets passed as props.
+An individual Todo component knows how to render a single element in that list.
+To get started make static todo data in TodoApp that is passed TodoList and then into Todo.
+
+Spread operator
+	{...todo}
+
+------------Testing List Components------------
+
+// Returns array.
+// Checks how many of a given component are rendered under a separate component.
+var todosComponents = TestUtils.scryRenderedComponentsWithType(todoList, Todo);
+
+------------Setting Up The Filter Component------------
+
+onChange event 
+	It is coool it will start to search and the display  the first letter you type in and so forth
+	with the next letters. Just like any other events it takes the method you want to call.
+
+	Does not require its handleChange method to use  e.preventDefault();
+
+TodoApp.jsx is the only component that maintains state, meaning it will use this.state.
+All other components are presentational.
+
+------------Wiring Up AddTodo------------
+
+~/REACT/ReactTodo$ npm install node-uuid --save-dev
+
+
+------------Toggling Todos------------
+
+There is no field to keep track of when a todo is completed.
+
+------------Dates with Momment------------
+
+momentjs.com/
+
+click 'Display' tab link it's very useful.
+
+localStorage.removeItem('todos');
+
+------------Why Redux?------------
+
+Maintains entire state of app separate from components in a store(plain JS object).
+Makes code more reusable and avoids having to write annoying handler functions in parent component
+that know how to handle interactions from children components.
+This means we have to pass data down into the components or pass a handler.
+This is not very reusable because it depends so much on the context of the parent.
+
+	<TodoSearch onSearch={this.handleSearch}/>
+    <TodoList todos={filteredTodos} onToggle={this.handleToggle}/>
+    <AddTodo onAddTodo={this.handleAddTodo}/>
+
+------------Installing Redux------------
+~/REACT$ cp -r ReactBoilerplate3 LearnRedux 
+
+And remove git remote.
+Installing Redux
+~/REACT$ cd LearnRedux/
+~/REACT/LearnRedux$ git remote -v
+origin	git@github.com:JairoHernandez/react-boilerplate.git (fetch)
+origin	git@github.com:JairoHernandez/react-boilerplate.git (push)
+~/REACT/LearnRedux$ git remote rm origin
+~/REACT/LearnRedux$ npm install redux@3.3.1 --save-dev
+
+------------Pure Functions------------
+
+Take the time to make sure a pure function is in fact not manipulating original(outside/global) values 
+passed into the function. See redux-example.jsx. Inside of redux parts of the code have to be pure 
+functions otherwise code is not going to work as expected.
+
+1. Same output with the same input.
+2. No side effects. Can't use variables on the global state within the function(not passed in big difference).
+It shouldn't be updating any variables outside of it.
+3. Avoid promises and asynchronous call like I/O requests accessing a DB or making an HTTP request 
+to some 3rd party API.
