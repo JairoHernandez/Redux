@@ -922,4 +922,14 @@ Toggling actions like 'show completed' checkbox dont require being passed in.
 		name: 'Andrew'
 	};
 
-3:05
+------------Subscribing to Changes and Debugging------------
+
+// Subscribe to changes to your state. Function called everytime state changes.
+store.subscribe(() => {
+
+});
+
+This will unsubscribe.
+unsubscribe();
+
+Install ReduxDev tool.
