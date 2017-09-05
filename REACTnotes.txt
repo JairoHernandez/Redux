@@ -933,3 +933,8 @@ This will unsubscribe.
 unsubscribe();
 
 Install ReduxDev tool.
+
+------------Redux Actions:  Add To Arrays------------
+
+Changes 1 type without changing anything else.
+7:22 huh

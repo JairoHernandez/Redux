@@ -12,6 +12,8 @@ var stateDefault = {
     todos: []
 };
 
+
+
 var reducer = (state=stateDefault, action) => {
 
     switch (action.type) {
