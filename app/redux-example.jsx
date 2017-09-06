@@ -4,10 +4,12 @@ console.log('Starting redux example');
 
 var stateDefault = {
     name: 'Anonymous',
-    hobbies: []
+    hobbies: [],
+    movies: []
 };
 
 var nextHobbyId = 1;
+var nextMovieId = 1;
 
 // state passed is the value before a triggered change.
 var reducer = (state=stateDefault, action) => {
@@ -19,15 +21,37 @@ var reducer = (state=stateDefault, action) => {
             return {...state, name: action.name};
         case 'ADD_HOBBY':
             return {
-                ...state, 
-                hobbies: [
-                    ...state.hobbies, 
+                ...state, // Grabs all properties from existing state
+                hobbies: [ // then overrides properties in hobbies array.
+                    ...state.hobbies, // Grabs properties from existing hobbies array using ES6 spread.
                     {
-                        id: nextHobbyId++,
+                        id: nextHobbyId++, // Creates brand new object with these properties.
                         hobby: action.hobby
                     }
                 ]
-            }
+            };
+        case 'REMOVE_HOBBY':
+            return {
+                ...state,
+                hobbies: state.hobbies.filter((hobby) => hobby.id !== action.id) 
+            };
+        case 'ADD_MOVIE':
+            return {
+                ...state,
+                movies: [
+                    ...state.movies,
+                    {
+                        id: nextMovieId++,
+                        title: action.title,
+                        genre: action.genre
+                    }
+                ]
+            };
+        case 'REMOVE_MOVIE':
+            return {
+                ...state,
+                movies: state.movies.filter((movie) => movie.id !== action.id)
+            };
         default:
             return state;
     }
@@ -58,11 +82,35 @@ store.dispatch({
     hobby: 'Running'
 });
 
+store.dispatch({
+    type: 'ADD_HOBBY',
+    hobby: 'Walking'
+});
+
+store.dispatch({
+    type: 'REMOVE_HOBBY',
+    id: 2
+});
+
 // unsubscribe();
 store.dispatch({type: 'CHANGE_NAME', name: 'Emily'});
 
+store.dispatch({
+    type: 'ADD_MOVIE',
+    title: 'Mad Max',
+    genre: 'Action'
+});
 
+store.dispatch({
+    type: 'ADD_MOVIE',
+    title: 'The Notebook',
+    genre: 'Romance'
+});
 
+store.dispatch({
+    type: 'REMOVE_MOVIE',
+    id: 1
+});
 
 // function changeProp(obj) {
 //     return {
