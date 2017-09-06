@@ -942,3 +942,6 @@ Changes 1 type without changing anything else.
 ------------Redux Actions:  Removing From Arrays------------
 
 filter creates a new array which means it will not update existing state.
+
+------------Working With Multiple Reducers------------
+9:20
