@@ -944,4 +944,23 @@ Changes 1 type without changing anything else.
 filter creates a new array which means it will not update existing state.
 
 ------------Working With Multiple Reducers------------
-9:20
+
+------------Creating Action Generators------------
+
+Action generators are very simple functions.
+They take all of the parameters you need to generate your action and they return the object.
+
+	var addMovie = (title, genre) => {
+		return {
+			type: 'ADD_MOVIE',
+			title,
+			genre
+		};
+	};
+
+	var removeMovie = (id) => {
+		return {
+			type: 'REMOVE_MOVIE',
+			id
+		};
+	};
