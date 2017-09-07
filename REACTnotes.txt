@@ -964,3 +964,12 @@ They take all of the parameters you need to generate your action and they return
 			id
 		};
 	};
+
+------------Asynchronous  Actions------------
+
+Website API that gives you your IP addy.
+
+1. Use https://ipinfo.io/ to fetch longitude latitude.
+2. Generate link that goes to that longitude latitude in Google maps.
+
+11:00
