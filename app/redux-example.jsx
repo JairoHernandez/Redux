@@ -12,55 +12,10 @@ var nextHobbyId = 1;
 var nextMovieId = 1;
 
 // state passed is the value before a triggered change.
-var oldReducer = (state=stateDefault, action) => {
-    //state = state || {name: 'Anonymous'}; // ES5 version of passing in state = {name: 'Anonymous'}
-    
-    // console.log('New action:', action); // 1) New action: Object {type: "@@redux/INIT"} 3) New action: Object {type: "CHANGE_NAME", name: "Andrew"}
-    switch (action.type) {
-        case 'CHANGE_NAME':
-            return {...state, name: action.name};
-        case 'ADD_HOBBY':
-            return {
-                ...state, // Grabs all properties from existing state
-                hobbies: [ // then overrides properties in hobbies array.
-                    ...state.hobbies, // Grabs properties from existing hobbies array using ES6 spread.
-                    {
-                        id: nextHobbyId++, // Creates brand new object with these properties.
-                        hobby: action.hobby
-                    }
-                ]
-            };
-        case 'REMOVE_HOBBY':
-            return {
-                ...state,
-                hobbies: state.hobbies.filter((hobby) => hobby.id !== action.id) 
-            };
-        case 'ADD_MOVIE':
-            return {
-                ...state,
-                movies: [
-                    ...state.movies,
-                    {
-                        id: nextMovieId++,
-                        title: action.title,
-                        genre: action.genre
-                    }
-                ]
-            };
-        case 'REMOVE_MOVIE':
-            return {
-                ...state,
-                movies: state.movies.filter((movie) => movie.id !== action.id)
-            };
-        default:
-            return state;
-    }
-};
-
 var nameReducer = (state='Anonymous', action) => {
     switch(action.type) {
         case 'CHANGE_NAME':
-            return action.name; // state is no longer an object like in oldReducer it's now an array.
+            return action.name; // state is no longer an object like in oldReducer it's now an array so no attributes needed.
         default:
             return state;
     }
@@ -70,7 +25,7 @@ var hobbiesReducer = (state=[], action) => { // Simplified since no need to care
     switch(action.type) {
         case 'ADD_HOBBY':
             return [ 
-                ...state, // state is no longer an object with properties like in oldReducer it's now an array. 
+                ...state, // state is no longer an object with properties like in oldReducer it's now an array so no attributes needed.
                 {
                     id: nextHobbyId++, // Creates brand new object with these properties.
                     hobby: action.hobby
@@ -83,11 +38,28 @@ var hobbiesReducer = (state=[], action) => { // Simplified since no need to care
     }
 };
 
-
+var moviesReducer = (state=[], action) => {
+    switch(action.type) {
+        case 'ADD_MOVIE':
+            return [
+                ...state,
+                {
+                    id: nextMovieId++,
+                    title: action.title,
+                    genre: action.genre
+                }
+            ];
+        case 'REMOVE_MOVIE':
+            return state.filter((movie) => movie.id !== action.id);
+        default:
+            return state;
+    }
+};
 
 var reducer = redux.combineReducers({
     name: nameReducer, // name state to be manged by nameReducer
-    hobbies: hobbiesReducer
+    hobbies: hobbiesReducer,
+    movies: moviesReducer
 });
 
 // Store consists of search text, completed fields, todos array.
