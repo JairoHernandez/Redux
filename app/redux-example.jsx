@@ -1,4 +1,5 @@
 var redux = require('redux');
+var axios = require('axios');
 
 console.log('Starting redux example');
 
@@ -101,14 +102,14 @@ var mapReducer = (state={isFetching: false, url: undefined}, action) => {
             return {
                 isFetching: true,
                 url: undefined
-            }
+            };
         case 'COMPLETE_LOCATION_FETCH':
             return {
                 isFetching: false,
                 url: action.url
-            }
+            };
         default:
-            return state
+            return state;
     }
 };
 
@@ -118,18 +119,20 @@ var startLocationFetch = () => {
 
 var completeLocationFetch = (url) => {
     return {
-        type: COMPLETE_LOCATION_FETCH,
+        type: 'COMPLETE_LOCATION_FETCH',
         url 
     };
 };
 
 var fetchLocation = () => {
     // Let app know we've started fetching process
-    store.dispatch(startLocationFetch);
+    // If u forget toe call startLocationFetch() without paranthesis you see this error.
+    // Actions must be plain objects. Use custom middleware for async actions
+    store.dispatch(startLocationFetch()); 
 
     axios.get('http://ipinfo.io').then(function(res) {
         var loc = res.data.loc;
-        var baseUrl = 'http://maps.google.come?q=';
+        var baseUrl = 'http://maps.google.com?q=';
 
         store.dispatch(completeLocationFetch(baseUrl + loc));
     });
@@ -152,8 +155,14 @@ var unsubscribe = store.subscribe(() => {
     var state = store.getState(); // Fires everytime state changes.
 
     console.log('Name is', state.name); // 4) Name should be andrew Object {name: "Anonymous"}
-    document.getElementById('app').innerHTML = state.name;
+    // document.getElementById('app').innerHTML = state.name;
     console.log('New state', store.getState());
+
+    if (state.map.isFetching) {
+        document.getElementById('app').innerHTML = 'Loading...';    
+    } else if (state.map.url) {
+        document.getElementById('app').innerHTML = '<a href="' + state.map.url + '" target="_blank">View Your Location</a>'
+    }
 });
 
 var currentState = store.getState();
