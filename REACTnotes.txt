@@ -972,4 +972,16 @@ Website API that gives you your IP addy.
 1. Use https://ipinfo.io/ to fetch longitude latitude.
 2. Generate link that goes to that longitude latitude in Google maps.
 
-11:00
+------------Organizing Your Actions and Reducers------------
+Using 'export' keyword is good way to test reducers and actions.
+
+This line 
+
+	store.dispatch(startLocationFetch());
+
+will no longer work after separating out store/reducers/actions into separate files.
+You have to install redux-thunk middleware. 
+
+	$ npm install --save-dev redux-thunk@2.0.1
+
+10:00
