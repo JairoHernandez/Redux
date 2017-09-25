@@ -1,5 +1,4 @@
 var redux = require('redux');
-var axios = require('axios');
 
 console.log('Starting redux example');
 
@@ -24,7 +23,7 @@ var unsubscribe = store.subscribe(() => {
 var currentState = store.getState();
 console.log('currentState:', currentState); // 2) currentState Object {name: "Anonymous"}
 
-actions.fetchLocation();
+store.dispatch(actions.fetchLocation());
 
 // Triggers action to change state.
 store.dispatch(actions.changeName('Andrew'));

@@ -1,3 +1,5 @@
+var axios = require('axios');
+
 export var changeName = (name) => {
     return {
         type: 'CHANGE_NAME',
@@ -45,16 +47,19 @@ export var completeLocationFetch = (url) => {
     };
 };
 
+// redux-thunk will allow redux to work with functions.
 export var fetchLocation = () => {
-    // Let app know we've started fetching process
-    // If u forget toe call startLocationFetch() without paranthesis you see this error.
-    // Actions must be plain objects. Use custom middleware for async actions
-    store.dispatch(startLocationFetch()); 
+    return (dispatch, getState) => {
+        // Let app know we've started fetching process
+        // If u forget toe call startLocationFetch() without paranthesis you see this error.
+        // Actions must be plain objects. Use custom middleware for async actions
+        dispatch(startLocationFetch()); 
 
-    axios.get('http://ipinfo.io').then(function(res) {
-        var loc = res.data.loc;
-        var baseUrl = 'http://maps.google.com?q=';
+        axios.get('http://ipinfo.io').then(function(res) {
+            var loc = res.data.loc;
+            var baseUrl = 'http://maps.google.com?q=';
 
-        store.dispatch(completeLocationFetch(baseUrl + loc));
-    });
+            dispatch(completeLocationFetch(baseUrl + loc));
+        });
+    };
 };

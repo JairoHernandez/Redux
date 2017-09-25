@@ -984,4 +984,5 @@ You have to install redux-thunk middleware.
 
 	$ npm install --save-dev redux-thunk@2.0.1
 
-10:00
+redux.applyMiddleware(thunk) teaches redux how to work with actions that are not objects.
+redux-thunk will allow redux to work with functions.

@@ -13,6 +13,7 @@ export var configure = () => {
 
 // Store consists of search text, completed fields, todos array.
 var store = redux.createStore(reducer, redux.compose(
+    redux.applyMiddleware(thunk),
     window.devToolsExtension ? window.devToolsExtension() : f => f
 ));
 
